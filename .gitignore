@@ -1,4 +1,11 @@
 .vscode
 .venv
 __pycache__/
-logs/*
+leadGenerator/logs/*
+package-lock.json
+node_modules
+dist
+out
+.DS_Store
+.eslintcache
+*.log*
