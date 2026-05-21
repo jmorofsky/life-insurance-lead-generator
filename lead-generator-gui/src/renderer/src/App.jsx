@@ -1,10 +1,22 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import Leads from './components/Leads';
 
 
 export default function App() {
   const [currentView, setCurrentView] = useState('Dashboard');
+  const [data, setData] = useState([
+    {
+      name: 'John',
+      age: '30',
+      color: null
+    },
+    {
+      name: 'Adam',
+      age: '25',
+      color: '#13c5f1'
+    }
+  ]);
 
   return (
     <div className='flex h-screen overflow-hidden'>
@@ -19,7 +31,14 @@ export default function App() {
         }
 
         {currentView === 'Leads' &&
-          <Leads />
+          <Leads
+            data={data}
+            onColorChange={(rowId, color) => {
+              const updatedData = [...data];
+              updatedData[rowId].color = color;
+              setData(updatedData);
+            }}
+          />
         }
 
         {currentView === 'Generate' &&
