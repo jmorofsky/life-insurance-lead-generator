@@ -16,7 +16,7 @@ export default function App() {
       age: '25',
       color: '#13c5f1'
     }
-  ]);
+  ]); // TODO: load from db
 
   return (
     <div className='flex h-screen overflow-hidden'>
@@ -37,6 +37,7 @@ export default function App() {
               const updatedData = [...data];
               updatedData[rowId].color = color;
               setData(updatedData);
+              // TODO: sync to db
             }}
           />
         }

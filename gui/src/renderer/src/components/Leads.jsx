@@ -27,6 +27,7 @@ export default function Leads({ data, onColorChange }) {
         columns,
         data,
         enableStickyHeader: true,
+        enableStickyFooter: true,
         initialState: {
             density: 'compact',
             pagination: { pageIndex: 0, pageSize: 100 }
