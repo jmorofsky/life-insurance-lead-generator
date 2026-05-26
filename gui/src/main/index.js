@@ -56,6 +56,10 @@ app.whenReady().then(() => {
     return databaseService.getLeads();
   });
 
+  ipcMain.handle('db:updateColor', (e, rowId, color) => {
+    return databaseService.updateColor(rowId, color);
+  });
+
   createWindow();
 
   app.on('activate', function () {

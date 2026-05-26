@@ -36,7 +36,7 @@ export default function Leads({ data, onColorChange }) {
             sx: { minHeight: '100%' }
         },
         muiTableBodyRowProps: ({ row }) => {
-            const colorKey = data[row.id].color;
+            const colorKey = data[row.id].rowColor;
 
             return {
                 sx: {

@@ -26,7 +26,7 @@ const MIGRATIONS = [
         'ALTER TABLE leads ADD COLUMN rowColor TINYTEXT'
     ],
     [
-        'INSERT INTO leads (name, age) VALUES (\'Bill\', 65)'
+        'INSERT INTO leads (name, age, rowColor) VALUES (\'Bill\', 65, \'\')'
     ]
 ];
 
@@ -62,7 +62,7 @@ for (let i = 0; i < MIGRATIONS.length; i++) {
 function safeQuery(statement, method) {
     /**
     * @param {string} statement - SQL statement to execute
-    * @param {string} method - better-sqlite3 Statement object method to execute - typically 'all' or 'get'
+    * @param {string} method - better-sqlite3 Statement object method to execute - typically 'all', 'get', or 'run'
     */
 
     if (ERROR.code) {
@@ -76,6 +76,21 @@ function safeQuery(statement, method) {
 export const databaseService = {
     getLeads: () => {
         return safeQuery('SELECT * FROM leads', 'all') || [];
+    },
+    updateColor: (rowId, color) => {
+        const statement = `
+        UPDATE leads
+        SET rowColor = '${color}'
+        WHERE id = ${rowId}
+        `
+
+        try {
+           safeQuery(statement, 'run');
+           return 'success';
+        } catch (error) {
+            console.log(error);
+            return 'error';
+        };
     }
 };
 

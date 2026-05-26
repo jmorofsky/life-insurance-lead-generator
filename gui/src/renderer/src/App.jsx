@@ -33,9 +33,11 @@ export default function App() {
             data={data}
             onColorChange={(rowId, color) => {
               const updatedData = [...data];
-              updatedData[rowId].color = color;
+              updatedData[rowId].rowColor = color;
+
+              // +1 because our SQLite IDs start at 1, while MRT's start at 0
+              window.api.updateColor(rowId + 1, color);
               setData(updatedData);
-              // TODO: sync to db
             }}
           />
         }
