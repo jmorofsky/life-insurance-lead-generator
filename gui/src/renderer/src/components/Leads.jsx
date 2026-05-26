@@ -8,7 +8,7 @@ import ColorResetIcon from '../assets/colorReset.svg';
 import CloseIcon from '../assets/close.svg';
 
 
-export default function Leads({ data, onColorChange }) {
+export default function LeadTable({ data, onColorChange }) {
     const [enableColor, setEnableColor] = useState(false);
     const [selectedColor, setSelectedColor] = useState(null);
 

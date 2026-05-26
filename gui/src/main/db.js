@@ -3,30 +3,47 @@ import Database from 'better-sqlite3';
 import path from 'path';
 
 
-// region init db
+// #region init db
 
 const dbPath = path.join(app.getPath('userData'), 'database.db');
 const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
 
-db.exec(`
-    CREATE TABLE IF NOT EXISTS leads (
-        id INTEGER PRIMARY KEY AUTOINCREMENT
-    )    
-`);
+// #endregion init db
 
-// endregion init db
-
-// region migrations
+// #region migrations
 
 const MIGRATIONS = [
     [
-        'ALTER TABLE leads ADD COLUMN name TINYTEXT',
-        'ALTER TABLE leads ADD COLUMN age UNSIGNED TINYINT',
-        'ALTER TABLE leads ADD COLUMN rowColor TINYTEXT'
-    ],
-    [
-        'INSERT INTO leads (name, age, rowColor) VALUES (\'Bill\', 65, \'\')'
+        `CREATE TABLE IF NOT EXISTS marriageLeads (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            source MEDIUMTEXT NOT NULL,
+            source_url MEDIUMTEXT,
+
+            spouse1_first TINYTEXT NOT NULL,
+            spouse1_middle TINYTEXT,
+            spouse1_last TINYTEXT NOT NULL,
+            spouse1_dob DATE,
+
+            spouse2_first TINYTEXT,
+            spouse2_middle TINYTEXT,
+            spouse2_last TINYTEXT,
+            spouse2_dob DATE,
+
+            married_last_name TINYTEXT,
+
+            license_date DATE,
+            license_number MEDIUMINT,
+            wedding_date DATE,
+            wedding_county TINYTEXT,
+            wedding_state TINYTEXT,
+
+            scraped_at DATE NOT NULL,
+            score DECIMAL(3, 2) NOT NULL,
+
+            rowColor TINYTEXT
+        )`
     ]
 ];
 
@@ -55,9 +72,9 @@ for (let i = 0; i < MIGRATIONS.length; i++) {
     };
 };
 
-// endregion migrations
+// #endregion migrations
 
-// region db service
+// #region db service
 
 function safeQuery(statement, method) {
     /**
@@ -74,8 +91,8 @@ function safeQuery(statement, method) {
 };
 
 export const databaseService = {
-    getLeads: () => {
-        return safeQuery('SELECT * FROM leads', 'all') || [];
+    getMarriageLeads: () => {
+        return safeQuery('SELECT * FROM marriageLeads', 'all') || [];
     },
     updateColor: (rowId, color) => {
         const statement = `
@@ -85,8 +102,8 @@ export const databaseService = {
         `
 
         try {
-           safeQuery(statement, 'run');
-           return 'success';
+            safeQuery(statement, 'run');
+            return 'success';
         } catch (error) {
             console.log(error);
             return 'error';
@@ -94,4 +111,4 @@ export const databaseService = {
     }
 };
 
-// endregion db service
+// #endregion db service

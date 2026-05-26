@@ -1,20 +1,18 @@
 import { useState, useEffect, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
-import Leads from './components/Leads';
+import LeadTable from './components/Leads';
 
 
 export default function App() {
   const [currentView, setCurrentView] = useState('Dashboard');
-  const [data, setData] = useState([]);
+  const [marriageLeads, setMarriageLeads] = useState([]);
 
-  useEffect(() => {
-    async function loadLeads() {
-      const resp = await window.api.getLeads();
-      setData(resp);
-    };
+  useEffect(() => { loadLeads() }, []);
 
-    loadLeads();
-  }, []);
+  async function loadLeads() {
+    const marriageLeads = await window.api.getMarriageLeads();
+    setMarriageLeads(marriageLeads);
+  };
 
   return (
     <div className='flex h-screen overflow-hidden'>
@@ -29,15 +27,15 @@ export default function App() {
         }
 
         {currentView === 'Leads' &&
-          <Leads
-            data={data}
+          <LeadTable
+            data={marriageLeads}
             onColorChange={(rowId, color) => {
-              const updatedData = [...data];
-              updatedData[rowId].rowColor = color;
+              const updatedLeads = [...marriageLeads];
+              updatedLeads[rowId].rowColor = color;
 
               // +1 because our SQLite IDs start at 1, while MRT's start at 0
               window.api.updateColor(rowId + 1, color);
-              setData(updatedData);
+              loadLeads();
             }}
           />
         }

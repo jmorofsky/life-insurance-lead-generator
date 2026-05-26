@@ -1,5 +1,4 @@
-import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -10,14 +9,13 @@ class MarriageLead:
     Normalized marriage lead record, sourced from a public license index.
     """
 
-    id: str = field(default_factory=lambda: str(uuid.uuid4()))
     source: str = ""
     source_url: str = ""
 
     # Person 1
-    spouse1_first: Optional[str] = None
+    spouse1_first: str = ""
     spouse1_middle: Optional[str] = None
-    spouse1_last: Optional[str] = None
+    spouse1_last: str = ""
     spouse1_dob: Optional[str] = None
 
     # Person 2
@@ -36,7 +34,7 @@ class MarriageLead:
     wedding_state: Optional[str] = None
 
     # Metadata
-    scraped_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    scraped_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     score: float = 0.0
 
     def is_hit(self):

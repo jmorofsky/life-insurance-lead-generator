@@ -54,8 +54,8 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  ipcMain.handle('db:getLeads', () => {
-    return databaseService.getLeads();
+  ipcMain.handle('db:getMarriageLeads', () => {
+    return databaseService.getMarriageLeads();
   });
 
   ipcMain.handle('db:updateColor', (e, rowId, color) => {
