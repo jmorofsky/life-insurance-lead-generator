@@ -1,22 +1,20 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import Leads from './components/Leads';
 
 
 export default function App() {
   const [currentView, setCurrentView] = useState('Dashboard');
-  const [data, setData] = useState([
-    {
-      name: 'John',
-      age: '30',
-      color: null
-    },
-    {
-      name: 'Adam',
-      age: '25',
-      color: '#13c5f1'
-    }
-  ]); // TODO: load from db
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    async function loadLeads() {
+      const resp = await window.api.getLeads();
+      setData(resp);
+    };
+
+    loadLeads();
+  }, []);
 
   return (
     <div className='flex h-screen overflow-hidden'>
