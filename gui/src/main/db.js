@@ -80,14 +80,20 @@ function safeQuery(statement, method) {
     /**
     * @param {string} statement - SQL statement to execute
     * @param {string} method - better-sqlite3 Statement object method to execute - typically 'all', 'get', or 'run'
+    * @return - normal method return if success, null if failure
     */
 
     if (ERROR.code) {
         return null;
     };
 
-    const stmt = db.prepare(statement);
-    return stmt[method]();
+    try {
+        const stmt = db.prepare(statement);
+        return stmt[method]();
+    } catch (error) {
+        console.error(error);
+        return null;
+    };
 };
 
 export const databaseService = {
@@ -101,13 +107,7 @@ export const databaseService = {
         WHERE id = ${rowId}
         `
 
-        try {
-            safeQuery(statement, 'run');
-            return 'success';
-        } catch (error) {
-            console.log(error);
-            return 'error';
-        };
+        return safeQuery(statement, 'run') ? 'success' : 'error';
     }
 };
 
