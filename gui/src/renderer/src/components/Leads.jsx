@@ -8,18 +8,111 @@ import ColorResetIcon from '../assets/colorReset.svg';
 import CloseIcon from '../assets/close.svg';
 
 
+function getContrastColor(hexColor) {
+    if (!hexColor) return '#000';
+
+    const hex = hexColor.replace('#', '');
+
+    const fullHex = hex.length === 3 ?
+        hex.split('').map(char => char + char).join('')
+        :
+        hex;
+
+    const r = parseInt(fullHex.substring(0, 2), 16);
+    const g = parseInt(fullHex.substring(2, 4), 16);
+    const b = parseInt(fullHex.substring(4, 6), 16);
+
+    // YIQ brightness formula
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq >= 128 ? '#000' : '#fff';
+};
+
 export default function LeadTable({ data, onColorChange }) {
     const [enableColor, setEnableColor] = useState(false);
     const [selectedColor, setSelectedColor] = useState(null);
 
     const columns = useMemo(() => [
         {
-            header: 'Name',
-            accessorKey: 'name'
+            header: 'Source',
+            accessorKey: 'source',
+            Cell: ({ renderedCellValue, row }) => (
+                <span>
+                    <a
+                        href={row.original.source_url}
+                        target='_blank'
+                        title={row.original.source_url}
+                        className='cursor-alias hover:underline'
+                    >
+                        {renderedCellValue}
+                    </a> ↗
+                </span>
+            )
         },
         {
-            header: 'Age',
-            accessorKey: 'age'
+            header: 'Spouse1 First',
+            accessorKey: 'spouse1_first'
+        },
+        {
+            header: 'Spouse1 Middle',
+            accessorKey: 'spouse1_middle'
+        },
+        {
+            header: 'Spouse1 Last',
+            accessorKey: 'spouse1_last'
+        },
+        {
+            header: 'Spouse1 DoB',
+            accessorKey: 'spouse1_dob'
+        },
+        {
+            header: 'Spouse2 First',
+            accessorKey: 'spouse2_first'
+        },
+        {
+            header: 'Spouse2 Middle',
+            accessorKey: 'spouse2_middle'
+        },
+        {
+            header: 'Spouse2 Last',
+            accessorKey: 'spouse2_last'
+        },
+        {
+            header: 'Spouse2 DoB',
+            accessorKey: 'spouse2_dob'
+        },
+        {
+            header: 'Married Last Name',
+            accessorKey: 'married_last_name'
+        },
+        {
+            header: 'License Date',
+            accessorKey: 'license_date'
+        },
+        {
+            header: 'License Number',
+            accessorKey: 'license_number'
+        },
+        {
+            header: 'Wedding Date',
+            accessorKey: 'wedding_date'
+        },
+        {
+            header: 'Wedding County',
+            accessorKey: 'wedding_county'
+        },
+        {
+            header: 'Wedding State',
+            accessorKey: 'wedding_state'
+        },
+        {
+            header: 'Generated Date',
+            accessorFn: (row) => {
+                return row.scraped_at.split('T')[0]
+            }
+        },
+        {
+            header: 'Score',
+            accessorKey: 'score'
         }
     ], []);
 
@@ -28,12 +121,22 @@ export default function LeadTable({ data, onColorChange }) {
         data,
         enableStickyHeader: true,
         enableStickyFooter: true,
+        autoResetPageIndex: false,
         initialState: {
             density: 'compact',
             pagination: { pageIndex: 0, pageSize: 100 }
         },
         muiTablePaperProps: {
-            sx: { minHeight: '100%' }
+            sx: {
+                minHeight: '100%', flexGrow: 1
+            }
+        },
+        muiTableBodyCellProps: ({ row }) => {
+            return {
+                sx: {
+                    color: getContrastColor(row.original.rowColor)
+                }
+            };
         },
         muiTableBodyRowProps: ({ row }) => {
             const colorKey = data[row.id].rowColor;
@@ -41,7 +144,7 @@ export default function LeadTable({ data, onColorChange }) {
             return {
                 sx: {
                     backgroundColor: colorKey ?? 'inherit',
-                    cursor: enableColor ? 'pointer' : null
+                    cursor: enableColor ? 'pointer' : null,
                 },
                 onClick: e => {
                     if (!enableColor) { return };

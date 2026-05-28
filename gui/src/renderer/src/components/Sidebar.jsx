@@ -21,7 +21,7 @@ export default function Sidebar({ currentView, onNavClick }) {
     };
 
     return (
-        <div className='bg-neutral-800 text-white w-[100px] flex flex-col items-center gap-3 pt-4'>
+        <div className='bg-neutral-800 text-white w-[100px] flex flex-col items-center gap-3 pt-4 shrink-0'>
             <NavItem
                 icon={DashboardIcon}
                 title='Dashboard'

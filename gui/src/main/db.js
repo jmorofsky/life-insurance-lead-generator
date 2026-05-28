@@ -102,8 +102,8 @@ export const databaseService = {
     },
     updateColor: (rowId, color) => {
         const statement = `
-        UPDATE leads
-        SET rowColor = '${color}'
+        UPDATE marriageLeads
+        SET rowColor = '${color || ''}'
         WHERE id = ${rowId}
         `
 

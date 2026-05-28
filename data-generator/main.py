@@ -22,6 +22,7 @@ def main():
     marriage_leads_list = [lead.to_dict() for lead in marriage_leads]
     stmt = marriage_leads[0].generate_insert_sql()
 
+    logger.info(f"Inserting {len(marriage_leads_list)} leads into DB.")
     db = DbConnection()
     db.execute_many(stmt, marriage_leads_list)
 
