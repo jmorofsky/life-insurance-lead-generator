@@ -1,6 +1,7 @@
 import logging, os, configparser
 from datetime import datetime
 from scrapers.marriage_scraper import MarriageLicenseScraper
+from db import DbConnection
 
 config = configparser.ConfigParser()
 config.read("appconfig.cfg")
@@ -17,6 +18,12 @@ def main():
 
     marriage = MarriageLicenseScraper()
     marriage_leads = marriage.fetch()
+
+    marriage_leads_list = [lead.to_dict() for lead in marriage_leads]
+    stmt = marriage_leads[0].generate_insert_sql()
+
+    db = DbConnection()
+    db.execute_many(stmt, marriage_leads_list)
 
 
 if __name__ == "__main__":

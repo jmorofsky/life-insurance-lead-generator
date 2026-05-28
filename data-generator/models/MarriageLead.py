@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import Optional
 
 
@@ -34,10 +34,12 @@ class MarriageLead:
     wedding_state: Optional[str] = None
 
     # Metadata
-    scraped_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    scraped_at: str = field(
+        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+    )
     score: float = 0.0
 
-    def is_hit(self):
+    def is_hit(self) -> bool:
         if (self.spouse1_last and self.spouse1_first) or (
             self.spouse2_last and self.spouse2_first
         ):
@@ -45,7 +47,7 @@ class MarriageLead:
 
         return False
 
-    def calculateScore(self):
+    def calculateScore(self) -> float:
         # start with a base of 0.90; newlyweds are top-tier prospects
         score = 0.90
 
@@ -61,3 +63,50 @@ class MarriageLead:
             score += 0.01
 
         return round(min(score, 1.0), 2)
+
+    def generate_insert_sql(self) -> str:
+        return """
+            INSERT INTO marriageLeads (
+                source, 
+                source_url, 
+                spouse1_first, 
+                spouse1_middle,
+                spouse1_last, 
+                spouse1_dob, 
+                spouse2_first, 
+                spouse2_middle, 
+                spouse2_last, 
+                spouse2_dob, 
+                married_last_name, 
+                license_date, 
+                license_number, 
+                wedding_date, 
+                wedding_county, 
+                wedding_state, 
+                scraped_at, 
+                score
+            )
+            VALUES (
+                :source, 
+                :source_url, 
+                :spouse1_first, 
+                :spouse1_middle,
+                :spouse1_last, 
+                :spouse1_dob, 
+                :spouse2_first, 
+                :spouse2_middle, 
+                :spouse2_last, 
+                :spouse2_dob, 
+                :married_last_name, 
+                :license_date, 
+                :license_number, 
+                :wedding_date, 
+                :wedding_county, 
+                :wedding_state, 
+                :scraped_at, 
+                :score
+            )
+        """
+
+    def to_dict(self) -> dict:
+        return asdict(self)

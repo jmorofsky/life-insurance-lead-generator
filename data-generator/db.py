@@ -10,7 +10,7 @@ APP_NAME = config["GUI"]["app_name"]
 class DbConnection:
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.db_dir = user_data_dir(APP_NAME, roaming=True)
+        self.db_dir = user_data_dir(appname=APP_NAME, appauthor=False, roaming=True)
         self.db_path = os.path.join(self.db_dir, "database.db")
 
     def _get_connection(self):
@@ -41,7 +41,7 @@ class DbConnection:
         finally:
             conn.close()
 
-    def executeMany(self, query: str, params: str | list):
+    def execute_many(self, query: str, params: str | list):
         try:
             conn = self._get_connection()
             cursor = conn.cursor()
@@ -55,7 +55,7 @@ class DbConnection:
         finally:
             conn.close()
 
-    def fetchOne(self, query: str, params: str | list) -> dict | None:
+    def fetch_one(self, query: str, params: str | list) -> dict | None:
         try:
             conn = self._get_connection()
             cursor = conn.cursor()
@@ -70,7 +70,7 @@ class DbConnection:
         finally: 
             conn.close()
 
-    def fetchAll(self, query: str, params: str | list) -> list[dict]:
+    def fetch_all(self, query: str, params: str | list) -> list[dict]:
         try:
             conn = self._get_connection()
             cursor = conn.cursor()
