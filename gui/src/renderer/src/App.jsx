@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import LeadTable from './components/Leads';
+import Generate from './components/Generate';
 
 
 export default function App() {
@@ -28,21 +29,17 @@ export default function App() {
       {currentView === 'Leads' &&
         <LeadTable
           data={marriageLeads}
-          onColorChange={(rowId, color) => {
-            const updatedLeads = [...marriageLeads];
-            updatedLeads[rowId].rowColor = color;
-
+          onColorChange={async (rowId, color) => {
             // +1 because our SQLite IDs start at 1, while MRT's start at 0
-            window.api.updateColor(parseInt(rowId) + 1, color);
+            await indow.api.updateColor(parseInt(rowId) + 1, color);
             loadMarriageLeads();
           }}
         />
       }
 
       {currentView === 'Generate' &&
-        <div>generate</div>
+        <Generate />
       }
-
     </div>
   );
 };

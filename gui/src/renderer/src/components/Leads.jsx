@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
+import { RiseLoader } from 'react-spinners';
 import Github from '@uiw/react-color-github';
 import ColorResetIcon from '../assets/colorReset.svg';
 import CloseIcon from '../assets/close.svg';
@@ -28,14 +29,23 @@ function getContrastColor(hexColor) {
 };
 
 export default function LeadTable({ data, onColorChange }) {
+    const [isRendering, setIsRendering] = useState(true);
     const [enableColor, setEnableColor] = useState(false);
     const [selectedColor, setSelectedColor] = useState(null);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsRendering(false);
+        }, 10);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     const columns = useMemo(() => [
         {
             header: 'Source',
             accessorKey: 'source',
-            Cell: ({ renderedCellValue, row }) => (
+            Cell: ({ renderedCellValue, row }) => useMemo(() => (
                 <span>
                     <a
                         href={row.original.source_url}
@@ -46,7 +56,7 @@ export default function LeadTable({ data, onColorChange }) {
                         {renderedCellValue}
                     </a> ↗
                 </span>
-            )
+            ), [])
         },
         {
             header: 'Spouse1 First',
@@ -122,6 +132,8 @@ export default function LeadTable({ data, onColorChange }) {
         enableStickyHeader: true,
         enableStickyFooter: true,
         autoResetPageIndex: false,
+        enableRowVirtualization: true,
+        enableColumnVirtualization: true,
         initialState: {
             density: 'compact',
             pagination: { pageIndex: 0, pageSize: 100 }
@@ -192,6 +204,18 @@ export default function LeadTable({ data, onColorChange }) {
             </div>
         )
     });
+
+    if (isRendering) {
+        return (
+            <div className='m-auto'>
+                <RiseLoader
+                    size='20'
+                    color='#60a5fa'
+                    speedMultiplier={1.7}
+                />
+            </div>
+        );
+    };
 
     return <MaterialReactTable table={table} />;
 };
