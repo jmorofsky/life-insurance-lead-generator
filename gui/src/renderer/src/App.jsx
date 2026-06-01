@@ -31,7 +31,7 @@ export default function App() {
           data={marriageLeads}
           onColorChange={async (rowId, color) => {
             // +1 because our SQLite IDs start at 1, while MRT's start at 0
-            await indow.api.updateColor(parseInt(rowId) + 1, color);
+            await window.api.updateColor(parseInt(rowId) + 1, color);
             loadMarriageLeads();
           }}
         />
