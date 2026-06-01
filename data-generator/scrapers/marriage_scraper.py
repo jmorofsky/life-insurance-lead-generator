@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from scrapers.base_scraper import BaseScraper
 from models.MarriageLead import MarriageLead
+from db import DbConnection
 
 
 class MarriageLicenseScraper(BaseScraper):
@@ -67,7 +68,58 @@ class MarriageLicenseScraper(BaseScraper):
             except Exception as e:
                 self.logger.error(f"{county_key} query failed: {e}")
 
-        return all_leads
+        return self.deduplicate(all_leads)
+
+    def deduplicate(self, leads: list[MarriageLead]) -> list[MarriageLead]:
+        # A marriage lead is considered a duplicate if there already exists some lead
+        # with the same two spouses with the same DoB's within a 6 month period.
+
+        dedup_leads = []
+        for lead in leads:
+            spouse1_first = lead.spouse1_first
+            spouse1_last = lead.spouse1_last
+            spouse1_dob = lead.spouse1_dob
+
+            spouse2_first = lead.spouse2_first
+            spouse2_last = lead.spouse2_last
+            spouse2_dob = lead.spouse2_dob
+
+            query = """
+                SELECT id FROM marriageLeads WHERE 
+                spouse1_first = ? OR ? AND
+                spouse2_first = ? OR ? AND
+                spouse1_last = ? OR ? AND
+                spouse2_last = ? OR ? AND
+                spouse1_dob = ? OR ? AND
+                spouse2_dob = ? OR ? AND
+                date(wedding_date) > date('now', '-6 months')
+            """
+
+            db = DbConnection()
+            result = db.fetch_one(
+                query,
+                [
+                    spouse1_first,
+                    spouse2_first,
+                    spouse1_first,
+                    spouse2_first,
+                    spouse1_last,
+                    spouse2_last,
+                    spouse1_last,
+                    spouse2_last,
+                    spouse1_dob,
+                    spouse2_dob,
+                    spouse1_dob,
+                    spouse2_dob,
+                ],
+            )
+
+            if result is None:
+                dedup_leads.append(lead)
+            else:
+                self.logger.info(f"Existing lead found. Skipping lead: {lead}")
+
+        return dedup_leads
 
     # region county parsers
 

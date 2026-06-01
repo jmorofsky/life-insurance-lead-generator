@@ -20,11 +20,15 @@ def main():
     marriage_leads = marriage.fetch()
 
     marriage_leads_list = [lead.to_dict() for lead in marriage_leads]
-    stmt = marriage_leads[0].generate_insert_sql()
 
-    logger.info(f"Inserting {len(marriage_leads_list)} leads into DB.")
-    db = DbConnection()
-    db.execute_many(stmt, marriage_leads_list)
+    if len(marriage_leads_list):
+        stmt = marriage_leads[0].generate_insert_sql()
+
+        logger.info(f"Inserting {len(marriage_leads_list)} leads into DB.")
+        db = DbConnection()
+        db.execute_many(stmt, marriage_leads_list)
+    else:
+        logger.info("No marriage leads to insert.")
 
 
 if __name__ == "__main__":

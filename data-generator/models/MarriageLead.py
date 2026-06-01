@@ -110,3 +110,6 @@ class MarriageLead:
 
     def to_dict(self) -> dict:
         return asdict(self)
+    
+    def __str__(self):
+        return f"{self.spouse1_first} {self.spouse1_last} married {self.spouse2_first} {self.spouse2_last} on {self.wedding_date}."
