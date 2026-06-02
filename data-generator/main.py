@@ -1,18 +1,27 @@
-import logging, os, configparser
+import logging, os, sys, json
 from datetime import datetime
 from scrapers.marriage_scraper import MarriageLicenseScraper
 from db import DbConnection
+from utilities import get_config
 
-config = configparser.ConfigParser()
-config.read("appconfig.cfg")
+config = get_config()
 
 filename = datetime.now().strftime("%Y%m%d_%H%M%S.log")
 logger = logging.getLogger(__name__)
 
 
 def main():
+    # read input from stdin (sent by Electron)
+    input_data = json.loads(sys.stdin.read())
+    user_data_path = input_data["userDataPath"]
+
+    log_path = os.path.join(user_data_path, "logs", filename)
+    log_dir = os.path.dirname(log_path)
+    if log_dir:
+        os.makedirs(log_dir, exist_ok=True)
+
     logging.basicConfig(
-        filename=os.path.join(config["Logging"]["logPath"], filename),
+        filename=log_path,
         level=config["Logging"]["logLevel"],
     )
 
@@ -29,6 +38,8 @@ def main():
         db.execute_many(stmt, marriage_leads_list)
     else:
         logger.info("No marriage leads to insert.")
+
+    sys.exit(0)
 
 
 if __name__ == "__main__":

@@ -8,4 +8,5 @@ dist
 out
 .DS_Store
 .eslintcache
-*.log*
+gui/resources/build
+gui/resources/main*

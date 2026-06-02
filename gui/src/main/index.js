@@ -2,8 +2,54 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { databaseService } from './db';
+import { spawn } from 'child_process';
 import icon from '../../resources/icon.png?asset';
 
+
+function getPythonPath() {
+  let path = '';
+
+  if (app.isPackaged) {
+    path = join(process.resourcesPath, 'main');
+  } else {
+    path = join(__dirname, '../../resources/main');
+  };
+
+  const ext = process.platform === 'win32' ? '.exe' : '';
+  return path + ext;
+};
+
+async function triggerPythonGenerator(configData) {
+  const filePath = getPythonPath();
+
+  const userDataPath = app.getPath('userData');
+  const py = spawn(filePath, [userDataPath], { windowsHide: true });
+
+  let stdout = '';
+  let stderr = '';
+
+  py.stdout.on('data', data => { stdout += data.toString() });
+  py.stderr.on('data', data => { stderr += data.toString() });
+
+  // py.stdin.write(JSON.stringify(configData || {}));
+  py.stdin.write(JSON.stringify({ userDataPath: userDataPath }));
+  py.stdin.end();
+
+  const exitCode = await new Promise((resolve, reject) => {
+    py.on('close', resolve);
+    py.on('error', reject);
+  });
+
+  // TODO: handle showing these better
+  console.log(stdout);
+  console.log(stderr);
+
+  if (exitCode !== 0) {
+    throw new Error(`Generator exited with code ${exitCode}.`);
+  };
+
+  return true;
+};
 
 function createWindow() {
   // Create the browser window.
@@ -54,11 +100,20 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
+  ipcMain.handle('generate', async (_, configData) => {
+    try {
+      await triggerPythonGenerator(configData);
+      return { status: 'success' };
+    } catch (error) {
+      return { status: 'error', error: error.message };
+    };
+  });
+
   ipcMain.handle('db:getMarriageLeads', () => {
     return databaseService.getMarriageLeads();
   });
 
-  ipcMain.handle('db:updateColor', (e, rowId, color) => {
+  ipcMain.handle('db:updateColor', (_, rowId, color) => {
     return databaseService.updateColor(rowId, color);
   });
 

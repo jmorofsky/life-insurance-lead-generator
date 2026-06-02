@@ -5,7 +5,8 @@ import { electronAPI } from '@electron-toolkit/preload';
 // Custom APIs for renderer
 const api = {
   getMarriageLeads: () => ipcRenderer.invoke('db:getMarriageLeads'),
-  updateColor: (rowId, color) => ipcRenderer.invoke('db:updateColor', rowId, color)
+  updateColor: (rowId, color) => ipcRenderer.invoke('db:updateColor', rowId, color),
+  generate: configData => ipcRenderer.invoke('generate', configData)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -1,8 +1,8 @@
-import os, logging, sqlite3, configparser
+import os, logging, sqlite3
 from platformdirs import user_data_dir
+from utilities import get_config
 
-config = configparser.ConfigParser()
-config.read("appconfig.cfg")
+config = get_config()
 
 APP_NAME = config["GUI"]["app_name"]
 
@@ -67,7 +67,7 @@ class DbConnection:
         except Exception as e:
             self.logger.error(f"An error occurred while executing query: {e}")
             raise RuntimeError("An error occurred while executing query.")
-        finally: 
+        finally:
             conn.close()
 
     def fetch_all(self, query: str, params: str | list) -> list[dict]:
@@ -82,5 +82,5 @@ class DbConnection:
         except Exception as e:
             self.logger.error(f"An error occurred while executing query: {e}")
             raise RuntimeError("An error occurred while executing query.")
-        finally: 
+        finally:
             conn.close()
