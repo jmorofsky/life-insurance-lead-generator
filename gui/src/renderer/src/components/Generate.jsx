@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 
-export default function Generate() {
+export default function Generate({ onGenerate }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -9,11 +9,11 @@ export default function Generate() {
         setLoading(true);
 
         const resp = await window.api.generate();
-        console.log(resp);
         if (resp.status !== 'success' && resp.error) {
             setError(resp.error);
         };
-        // TODO: reload leads
+
+        await onGenerate();
         setLoading(false);
     };
 

@@ -38,7 +38,9 @@ export default function App() {
       }
 
       {currentView === 'Generate' &&
-        <Generate />
+        <Generate
+          onGenerate={async () => loadMarriageLeads()}
+        />
       }
     </div>
   );
