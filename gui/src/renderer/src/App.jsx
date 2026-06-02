@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import LeadTable from './components/Leads';
 import Generate from './components/Generate';
+import Legal from './components/Legal';
 
 
 export default function App() {
@@ -41,6 +42,10 @@ export default function App() {
         <Generate
           onGenerate={async () => loadMarriageLeads()}
         />
+      }
+
+      {currentView === 'Legal' &&
+        <Legal />
       }
     </div>
   );
