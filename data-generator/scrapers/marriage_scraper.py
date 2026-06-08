@@ -133,7 +133,10 @@ class MarriageLicenseScraper(BaseScraper):
             if match:
                 try:
                     raw_data = rf"{match.group(1)}"
-                    cleaned_data = raw_data.replace("\\", "")
+                    if raw_data.endswith("\\"):
+                        raw_data = raw_data[:-1]
+                        
+                    cleaned_data = json.loads(f'"{raw_data}"').replace('\\"', '"')
                     license_json = json.loads(cleaned_data)
                 except Exception as e:
                     self.logger.error(f"Unable to parse raw json string response: {e}")
@@ -159,7 +162,7 @@ class MarriageLicenseScraper(BaseScraper):
                         'BLN': 'BEDEJUSTE', 
                         'BDOB': '01-31-1995', 
                         'BSurName': '', 
-                        'SpouseNames': 'BRANDON CHASE RICHMOND u003cbr /u003eSANDIE  BEDEJUSTE'
+                        'SpouseNames': 'BRANDON CHASE RICHMOND <br />SANDIE  BEDEJUSTE'
                     }
                     """
 
