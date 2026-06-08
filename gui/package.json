@@ -34,7 +34,6 @@
     "better-sqlite3": "^12.10.0",
     "electron-updater": "^6.3.9",
     "material-react-table": "^3.2.1",
-    "react-spinners": "^0.17.0",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
