@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+
+@theme {
+    --animate-sparkle: sparkle 2.5s ease-in-out infinite;
+
+    @keyframes sparkle {
+        0% {
+            color: oklch(70.7% 0.165 254.624);
+            transform: rotate(0);
+            opacity: 1;
+        }
+
+        50% {
+            color: oklch(62.7% 0.265 303.9);
+            transform: rotate(20deg);
+            opacity: 0.75;
+        }
+
+        100% {
+            color: oklch(70.7% 0.165 254.624);
+            transform: rotate(0);
+            opacity: 1;
+        }
+    }
+}
