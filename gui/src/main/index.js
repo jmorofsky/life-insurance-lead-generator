@@ -52,7 +52,6 @@ async function triggerPythonGenerator(configData) {
 };
 
 function createWindow() {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -86,9 +85,6 @@ function createWindow() {
   };
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
@@ -99,6 +95,8 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
   });
+
+  // # region server call definitions
 
   ipcMain.handle('generate', async (_, configData) => {
     try {
@@ -116,6 +114,8 @@ app.whenReady().then(() => {
   ipcMain.handle('db:updateColor', (_, rowId, color) => {
     return databaseService.updateColor(rowId, color);
   });
+
+  // # endregion server call definitions
 
   createWindow();
 
