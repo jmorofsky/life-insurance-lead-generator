@@ -9,3 +9,4 @@ out
 .eslintcache
 gui/resources/build
 gui/resources/main*
+token.txt

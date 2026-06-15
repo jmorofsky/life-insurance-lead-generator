@@ -1,6 +1,6 @@
 {
   "name": "lead-generator-gui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "GUI for generating and managing life insurance leads",
   "main": "./out/main/index.js",
   "author": "Jason Morofsky",
@@ -21,6 +21,7 @@
     "build": "electron-vite build",
     "postinstall": "electron-builder install-app-deps && electron-rebuild -f -w better-sqlite3",
     "package": "npm run build && electron-builder",
+    "publish": "npm run build && electron-builder --publish always",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
@@ -33,7 +34,7 @@
     "@tailwindcss/vite": "^4.3.0",
     "@uiw/react-color-github": "^2.10.1",
     "better-sqlite3": "^12.10.0",
-    "electron-updater": "^6.3.9",
+    "electron-updater": "^6.8.9",
     "material-react-table": "^3.2.1",
     "tailwindcss": "^4.3.0"
   },
