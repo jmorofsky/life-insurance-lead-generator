@@ -7,5 +7,5 @@ To create a new application installer, run `npm run package`.
 To publish a new release to GitHub: 
 1. Bump the version number in `package.json`.
 2. Set the environment variable `GH_TOKEN` with your GitHub access token.
-3. Optionally associate a code version with the release by pushing a tag with the same name as the version in `package.json`.
 4. Run `npm run publish`.
+5. The new release will be created in GitHub as a draft. To allow it to be seen by the public, navigate to the GitHub releases page and publish the release.
