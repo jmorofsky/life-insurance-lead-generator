@@ -96,6 +96,7 @@ function safeQuery(statement, method) {
     };
 };
 
+// TODO: better error handling here
 export const databaseService = {
     getMarriageLeads: () => {
         return safeQuery('SELECT * FROM marriageLeads', 'all') || [];

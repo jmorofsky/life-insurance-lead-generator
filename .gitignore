@@ -1,7 +1,6 @@
 .vscode
 .venv
 __pycache__/
-leadGenerator/logs/*
 package-lock.json
 node_modules
 dist

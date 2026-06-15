@@ -117,7 +117,7 @@ class MarriageLicenseScraper(BaseScraper):
             if result is None:
                 dedup_leads.append(lead)
             else:
-                self.logger.info(f"Lead already exists. Skipping lead: {lead}")
+                self.logger.info(f"Skipping duplicate lead: {lead}")
 
         return dedup_leads
 

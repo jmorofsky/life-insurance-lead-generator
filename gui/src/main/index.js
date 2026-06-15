@@ -10,7 +10,7 @@ function getPythonPath() {
   let path = '';
 
   if (app.isPackaged) {
-    path = join(process.resourcesPath, 'main');
+    path = join(process.resourcesPath, 'resources', 'main');
   } else {
     path = join(__dirname, '../../resources/main');
   };
@@ -96,7 +96,7 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  // # region server call definitions
+  // #region server call definitions
 
   ipcMain.handle('generate', async (_, configData) => {
     try {
@@ -115,7 +115,7 @@ app.whenReady().then(() => {
     return databaseService.updateColor(rowId, color);
   });
 
-  // # endregion server call definitions
+  // #endregion server call definitions
 
   createWindow();
 

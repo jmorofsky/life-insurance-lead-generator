@@ -1,13 +1,13 @@
 appId: com.electron.app
-productName: lead-generator-gui
+productName: Lead Generator
 directories:
   buildResources: build
 files:
-  - '!**/.vscode/*'
-  - '!src/*'
-  - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
-  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - out/**/*
+  - package.json
+  - '!src/${/*}'
+extraResources:
+  - resources/main.exe
 asarUnpack:
   - resources/**
 win:
@@ -16,7 +16,7 @@ nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
-  createDesktopShortcut: always
+  createDesktopShortcut: true
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:

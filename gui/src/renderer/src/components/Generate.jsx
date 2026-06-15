@@ -66,6 +66,8 @@ export default function Generate({ onGenerate }) {
 
     return (
         <div>
+            {error && <p>{error}</p>}
+
             <Footer
                 isOnline={isOnline}
                 loading={loading}

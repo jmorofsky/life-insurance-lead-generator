@@ -52,6 +52,7 @@ export default function LeadTable({ data, onColorChange }) {
                         target='_blank'
                         title={row.original.source_url}
                         className='cursor-alias hover:underline'
+                        onClick={e => e.stopPropagation()}
                     >
                         {renderedCellValue}
                     </a> ↗
