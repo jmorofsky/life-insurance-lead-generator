@@ -1,6 +1,6 @@
 {
   "name": "lead-generator-gui",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "GUI for generating and managing life insurance leads",
   "main": "./out/main/index.js",
   "author": "Jason Morofsky",
@@ -21,7 +21,7 @@
     "build": "electron-vite build",
     "postinstall": "electron-builder install-app-deps && electron-rebuild -f -w better-sqlite3",
     "package": "npm run build && electron-builder",
-    "publish": "npm run build && electron-builder --win --mac --publish always",
+    "publish": "npm run build && electron-builder --publish always",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
