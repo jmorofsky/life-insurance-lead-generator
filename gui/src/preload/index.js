@@ -11,7 +11,7 @@ const api = {
 
   // auto-updater
   onUpdateDownloaded: callback => ipcRenderer.on('update-downloaded', () => callback()),
-  startInstall: () => ipcRenderer.send('updater:start-install')
+  startInstall: () => ipcRenderer.send('updater:startInstall')
 };
 
 // #endregion server call definitions
