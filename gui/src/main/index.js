@@ -3,6 +3,7 @@ import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { databaseService } from './db';
 import { spawn } from 'child_process';
+import { autoUpdater } from 'electron-updater';
 import icon from '../../resources/icon.png?asset';
 
 
@@ -51,8 +52,9 @@ async function triggerPythonGenerator(configData) {
   return true;
 };
 
+let mainWindow;
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     minWidth: 850,
@@ -91,10 +93,28 @@ app.whenReady().then(() => {
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
   });
+
+  // #region auto-updater
+
+  if (app.isPackaged) {
+    autoUpdater.autoDownload = true;
+    autoUpdater.autoInstallOnAppQuit = true;
+
+    autoUpdater.checkForUpdates();
+
+    setInterval(() => {
+      autoUpdater.checkForUpdates();
+    }, 2 * 60 * 60 * 1000); // 2 hours
+  };
+
+  autoUpdater.on('update-downloaded', () => {
+    mainWindow.webContents.send('update-downloaded');
+  });
+
+  // #endregion auto-updater
 
   // #region server call definitions
 
@@ -113,6 +133,10 @@ app.whenReady().then(() => {
 
   ipcMain.handle('db:updateColor', (_, rowId, color) => {
     return databaseService.updateColor(rowId, color);
+  });
+
+  ipcMain.on('updater:startInstall', () => {
+    autoUpdater.quitAndInstall();
   });
 
   // #endregion server call definitions

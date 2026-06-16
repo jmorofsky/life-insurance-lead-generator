@@ -1,3 +1,4 @@
-provider: generic
-url: https://example.com/auto-updates
-updaterCacheDirName: lead-generator-gui-updater
+provider: github
+owner: jmorofsky
+repo: life-insurance-lead-generator
+private: false

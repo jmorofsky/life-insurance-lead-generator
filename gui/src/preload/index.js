@@ -3,11 +3,17 @@ import { electronAPI } from '@electron-toolkit/preload';
 
 
 // #region server call definitions
+
 const api = {
   getMarriageLeads: () => ipcRenderer.invoke('db:getMarriageLeads'),
   updateColor: (rowId, color) => ipcRenderer.invoke('db:updateColor', rowId, color),
-  generate: configData => ipcRenderer.invoke('generate', configData)
+  generate: configData => ipcRenderer.invoke('generate', configData),
+
+  // auto-updater
+  onUpdateDownloaded: callback => ipcRenderer.on('update-downloaded', () => callback()),
+  startInstall: () => ipcRenderer.send('updater:start-install')
 };
+
 // #endregion server call definitions
 
 if (process.contextIsolated) {

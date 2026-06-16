@@ -1,8 +1,8 @@
 Right now, only Florida marriage leads are implemented.
 
-To be able to run the Python lead generator script from with the GUI app, run the command `npm run build:python` from the `./gui` directory.
+To be able to run the Python lead generator script from with the GUI app, run the command `npm run build:python` from the `./gui` directory. Rerun this command whenever changes are made to the generator code.
 
-To create a new application installer, run `npm run package`.
+To create a new Windows application installer, run `npm run package`.
 
 To publish a new release to GitHub: 
 1. Bump the version number in `package.json`.

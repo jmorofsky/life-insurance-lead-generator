@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import UpdateBanner from './components/UpdateBanner';
 import Sidebar from './components/Sidebar';
 import LeadTable from './components/Leads';
 import Generate from './components/Generate';
@@ -22,6 +23,8 @@ export default function App() {
         currentView={currentView}
         onNavClick={title => setCurrentView(title)}
       />
+
+      <UpdateBanner />
 
       {currentView === 'Dashboard' &&
         <div>dashboard</div>
