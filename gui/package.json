@@ -1,6 +1,6 @@
 {
   "name": "lead-generator-gui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "GUI for generating and managing life insurance leads",
   "main": "./out/main/index.js",
   "author": "Jason Morofsky",
