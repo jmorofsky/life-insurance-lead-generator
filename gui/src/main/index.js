@@ -99,16 +99,18 @@ app.whenReady().then(() => {
 
   // #region auto-updater
 
-  if (app.isPackaged) {
-    autoUpdater.autoDownload = true;
-    autoUpdater.autoInstallOnAppQuit = true;
-
-    autoUpdater.checkForUpdates();
-
-    setInterval(() => {
-      autoUpdater.checkForUpdates();
-    }, 2 * 60 * 60 * 1000); // 2 hours
+  if (!app.isPackaged) {
+    autoUpdater.forceDevUpdateConfig = true;
   };
+
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+
+  autoUpdater.checkForUpdates();
+
+  setInterval(() => {
+    autoUpdater.checkForUpdates();
+  }, 60 * 60 * 1000); // 1 hour
 
   autoUpdater.on('update-downloaded', () => {
     mainWindow.webContents.send('update-downloaded');
