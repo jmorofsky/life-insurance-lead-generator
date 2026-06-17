@@ -10,6 +10,7 @@ const api = {
   generate: configData => ipcRenderer.invoke('generate', configData),
 
   // auto-updater
+  onUpdateError: callback => ipcRenderer.on('update-error', () => callback()),
   onUpdateDownloaded: callback => ipcRenderer.on('update-downloaded', () => callback()),
   startInstall: () => ipcRenderer.send('updater:startInstall')
 };

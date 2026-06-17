@@ -106,11 +106,15 @@ app.whenReady().then(() => {
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
 
-  autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdates().catch(() => {});
 
   setInterval(() => {
     autoUpdater.checkForUpdates();
   }, 60 * 60 * 1000); // 1 hour
+
+  autoUpdater.on('error', () => {
+    mainWindow.webContents.send('update-error');
+  });
 
   autoUpdater.on('update-downloaded', () => {
     mainWindow.webContents.send('update-downloaded');
