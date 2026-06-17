@@ -41,8 +41,7 @@ export default function Sidebar({ currentView, onNavClick }) {
             />
 
             <div
-                className='w-full justify-end flex flex-col gap-3 grow-1'
-                style={{ color: '#aaa' }}
+                className='w-full justify-end flex flex-col gap-3 grow-1 text-neutral-400'
             >
                 <NavItem
                     icon={GavelIcon}

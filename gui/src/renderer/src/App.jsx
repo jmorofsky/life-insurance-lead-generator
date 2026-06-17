@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import UpdateBanner from './components/UpdateBanner';
 import Sidebar from './components/Sidebar';
+import Dashboard from './components/Dashboard';
 import LeadTable from './components/Leads';
 import Generate from './components/Generate';
 import Legal from './components/Legal';
@@ -27,7 +28,7 @@ export default function App() {
       <UpdateBanner />
 
       {currentView === 'Dashboard' &&
-        <div>dashboard</div>
+        <Dashboard />
       }
 
       {currentView === 'Leads' &&
