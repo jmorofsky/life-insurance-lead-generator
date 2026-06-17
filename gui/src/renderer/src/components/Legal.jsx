@@ -6,7 +6,7 @@ export default function Legal() {
     const olClass = 'ml-6 list-decimal flex flex-col gap-2';
 
     return (
-        <div className='p-4 overflow-y-scroll w-full'>
+        <div className='p-4 overflow-y-scroll w-full h-full'>
             <div className='max-w-6xl'>
                 <h1 className={h1Class}>Important Legal Considerations</h1>
                 <hr />

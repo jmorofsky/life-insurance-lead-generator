@@ -139,11 +139,6 @@ export default function LeadTable({ data, onColorChange }) {
             density: 'compact',
             pagination: { pageIndex: 0, pageSize: 100 }
         },
-        muiTablePaperProps: {
-            sx: {
-                minHeight: '100%', flexGrow: 1
-            }
-        },
         muiTableBodyCellProps: ({ row }) => {
             return {
                 sx: {
@@ -207,9 +202,13 @@ export default function LeadTable({ data, onColorChange }) {
     });
 
     if (isRendering) {
-        return <div className='m-auto'>
-            <Spinner size={45} />
-        </div>;
+        return (
+            <div className='flex h-full'>
+                <div className='m-auto w-fit'>
+                    <Spinner size={45} />
+                </div>
+            </div>
+        );
     };
 
     return <MaterialReactTable table={table} />;

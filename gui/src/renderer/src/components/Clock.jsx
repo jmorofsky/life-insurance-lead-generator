@@ -57,8 +57,8 @@ export default function Clock() {
     }, []);
 
     return (
-        <div className='text-neutral-700 select-none'>
-            <p className='font-mono font-bold text-sm text-end'>
+        <div className='text-neutral-700 select-none w-fit'>
+            <p className='font-mono font-bold text-sm text-end relative top-[6px]'>
                 {time}
             </p>
 

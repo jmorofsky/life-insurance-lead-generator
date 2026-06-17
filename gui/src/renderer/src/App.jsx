@@ -25,32 +25,34 @@ export default function App() {
         onNavClick={title => setCurrentView(title)}
       />
 
-      <UpdateBanner />
+      <div className='h-full grow-1 min-w-0'>
+        <UpdateBanner />
 
-      {currentView === 'Dashboard' &&
-        <Dashboard />
-      }
+        {currentView === 'Dashboard' &&
+          <Dashboard />
+        }
 
-      {currentView === 'Leads' &&
-        <LeadTable
-          data={marriageLeads}
-          onColorChange={async (rowId, color) => {
-            // +1 because our SQLite IDs start at 1, while MRT's start at 0
-            await window.api.updateColor(parseInt(rowId) + 1, color);
-            loadMarriageLeads();
-          }}
-        />
-      }
+        {currentView === 'Leads' &&
+          <LeadTable
+            data={marriageLeads}
+            onColorChange={async (rowId, color) => {
+              // +1 because our SQLite IDs start at 1, while MRT's start at 0
+              await window.api.updateColor(parseInt(rowId) + 1, color);
+              loadMarriageLeads();
+            }}
+          />
+        }
 
-      {currentView === 'Generate' &&
-        <Generate
-          onGenerate={async () => loadMarriageLeads()}
-        />
-      }
+        {currentView === 'Generate' &&
+          <Generate
+            onGenerate={async () => loadMarriageLeads()}
+          />
+        }
 
-      {currentView === 'Legal' &&
-        <Legal />
-      }
+        {currentView === 'Legal' &&
+          <Legal />
+        }
+      </div>
     </div>
   );
 };

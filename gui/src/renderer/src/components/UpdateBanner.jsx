@@ -25,7 +25,7 @@ export default function UpdateBanner() {
 
     if (error) {
         return (
-            <div className='absolute left-[100px] h-7 bg-red-300 right-0 border-b border-red-400 text-center shadow-2xs shadow-neutral-300 text-sm'>
+            <div className='absolute left-[100px] right-0 h-7 bg-red-300 border-b border-red-400 text-center shadow-2xs shadow-neutral-300 text-sm'>
                 <p className='p-1'>
                     An error occurred while downloading application updates.
                 </p>
@@ -42,7 +42,7 @@ export default function UpdateBanner() {
 
     if (updateReady) {
         return (
-            <div className='absolute left-[100px] h-7 bg-blue-300 right-0 border-b border-blue-400 text-center shadow-2xs shadow-neutral-300 text-sm'>
+            <div className='absolute left-[100px] right-0 h-7 bg-blue-300 border-b border-blue-400 text-center shadow-2xs shadow-neutral-300 text-sm'>
                 <p className='p-1'>
                     A new application version is available.&nbsp;
                     <span
