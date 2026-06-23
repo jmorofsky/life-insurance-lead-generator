@@ -5,9 +5,11 @@ import { electronAPI } from '@electron-toolkit/preload';
 // #region server call definitions
 
 const api = {
-  getMarriageLeads: () => ipcRenderer.invoke('db:getMarriageLeads'),
-  updateColor: (rowId, color) => ipcRenderer.invoke('db:updateColor', rowId, color),
   generate: configData => ipcRenderer.invoke('generate', configData),
+  createDataset: schema_json => ipcRenderer.invoke('db:createDataset', schema_json),
+  getDataset: table_name => ipcRenderer.invoke('db:getDataset', table_name),
+  getAllDatasets: () => ipcRenderer.invoke('db:getAllDatasets'),
+  updateColor: (table_name, row_id, color) => ipcRenderer.invoke('db:updateColor', table_name, row_id, color),
 
   // auto-updater
   onUpdateError: callback => ipcRenderer.on('update-error', () => callback()),

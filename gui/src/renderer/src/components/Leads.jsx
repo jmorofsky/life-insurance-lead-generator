@@ -1,215 +1,53 @@
-import { useState, useMemo, useEffect } from 'react';
-import {
-    MaterialReactTable,
-    useMaterialReactTable,
-} from 'material-react-table';
-import Spinner from './Spinner';
-import Github from '@uiw/react-color-github';
-import ColorResetIcon from '../assets/colorReset.svg';
-import CloseIcon from '../assets/close.svg';
+import LeadTable from './LeadTable';
 
 
-function getContrastColor(hexColor) {
-    if (!hexColor) return '#000';
+export default function Leads({ datasets, onDatasetClick }) {
+    return (
+        <>
+            <h1 className='pl-4 py-4 text-2xl font-semibold border-b-1 border-neutral-300 shadow-lg'>
+                Lead Datasets
+            </h1>
 
-    const hex = hexColor.replace('#', '');
+            <div className='p-6 flex flex-wrap gap-8'>
+                {datasets.map(dataset => {
+                    // dataset names follow a convention of leads_{table_name}
+                    const name = dataset.table_name.slice(6).replace('_', ' ');
+                    const [year, month, day] = dataset.created_at.split(' ')[0].split('-');
+                    const created_at = `${month}/${day}/${year}`;
 
-    const fullHex = hex.length === 3 ?
-        hex.split('').map(char => char + char).join('')
-        :
-        hex;
+                    return (
+                        <div
+                            key={dataset.id}
+                            className='w-75 border border-neutral-400 rounded shadow-lg shadow-neutral-500 cursor-pointer transition
+                                hover:scale-102'
+                            onClick={() => onDatasetClick(dataset.table_name)}
+                        >
+                            <p className='p-2 font-semibold text-xl bg-linear-to-r from-blue-300 to-fuchsia-300'>
+                                {name}
+                            </p>
 
-    const r = parseInt(fullHex.substring(0, 2), 16);
-    const g = parseInt(fullHex.substring(2, 4), 16);
-    const b = parseInt(fullHex.substring(4, 6), 16);
+                            <div className='p-4'>
+                                <p className='text-neutral-700 text-sm'>
+                                    {dataset.description}
+                                </p>
 
-    // YIQ brightness formula
-    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-    return yiq >= 128 ? '#000' : '#fff';
-};
+                                <p className='mt-4'>
+                                    <strong>{dataset.row_count}</strong>
+                                    {dataset.row_count == 1 ?
+                                        <> Lead</>
+                                        :
+                                        <> Leads</>
+                                    }
+                                </p>
 
-export default function LeadTable({ data, onColorChange }) {
-    const [isRendering, setIsRendering] = useState(true);
-    const [enableColor, setEnableColor] = useState(false);
-    const [selectedColor, setSelectedColor] = useState(null);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsRendering(false);
-        }, 10);
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    const columns = useMemo(() => [
-        {
-            header: 'Source',
-            accessorKey: 'source',
-            Cell: ({ renderedCellValue, row }) => useMemo(() => (
-                <span>
-                    <a
-                        href={row.original.source_url}
-                        target='_blank'
-                        title={row.original.source_url}
-                        className='cursor-alias hover:underline'
-                        onClick={e => e.stopPropagation()}
-                    >
-                        {renderedCellValue}
-                    </a> ↗
-                </span>
-            ), [])
-        },
-        {
-            header: 'Spouse1 First',
-            accessorKey: 'spouse1_first'
-        },
-        {
-            header: 'Spouse1 Middle',
-            accessorKey: 'spouse1_middle'
-        },
-        {
-            header: 'Spouse1 Last',
-            accessorKey: 'spouse1_last'
-        },
-        {
-            header: 'Spouse1 DoB',
-            accessorKey: 'spouse1_dob'
-        },
-        {
-            header: 'Spouse2 First',
-            accessorKey: 'spouse2_first'
-        },
-        {
-            header: 'Spouse2 Middle',
-            accessorKey: 'spouse2_middle'
-        },
-        {
-            header: 'Spouse2 Last',
-            accessorKey: 'spouse2_last'
-        },
-        {
-            header: 'Spouse2 DoB',
-            accessorKey: 'spouse2_dob'
-        },
-        {
-            header: 'Married Last Name',
-            accessorKey: 'married_last_name'
-        },
-        {
-            header: 'License Date',
-            accessorKey: 'license_date'
-        },
-        {
-            header: 'License Number',
-            accessorKey: 'license_number'
-        },
-        {
-            header: 'Wedding Date',
-            accessorKey: 'wedding_date'
-        },
-        {
-            header: 'Wedding County',
-            accessorKey: 'wedding_county'
-        },
-        {
-            header: 'Wedding State',
-            accessorKey: 'wedding_state'
-        },
-        {
-            header: 'Generated Date',
-            accessorFn: (row) => {
-                return row.scraped_at.split('T')[0]
-            }
-        },
-        {
-            header: 'Score',
-            accessorKey: 'score'
-        }
-    ], []);
-
-    const table = useMaterialReactTable({
-        columns,
-        data,
-        enableStickyHeader: true,
-        enableStickyFooter: true,
-        autoResetPageIndex: false,
-        enableRowVirtualization: true,
-        enableColumnVirtualization: true,
-        initialState: {
-            density: 'compact',
-            pagination: { pageIndex: 0, pageSize: 100 }
-        },
-        muiTableBodyCellProps: ({ row }) => {
-            return {
-                sx: {
-                    color: getContrastColor(row.original.rowColor)
-                }
-            };
-        },
-        muiTableBodyRowProps: ({ row }) => {
-            const colorKey = data[row.id].rowColor;
-
-            return {
-                sx: {
-                    backgroundColor: colorKey ?? 'inherit',
-                    cursor: enableColor ? 'pointer' : null,
-                },
-                onClick: e => {
-                    if (!enableColor) { return };
-                    onColorChange(row.id, selectedColor);
-                }
-            };
-        },
-        renderTopToolbarCustomActions: ({ table }) => (
-            <div className='flex gap-2 items-center'>
-                <Github
-                    color={selectedColor}
-                    onChange={color => {
-                        setEnableColor(true);
-                        setSelectedColor(color.hex);
-                    }}
-                    style={{ width: '412px' }}
-                />
-
-                <img
-                    src={ColorResetIcon}
-                    onClick={() => {
-                        setEnableColor(true);
-                        setSelectedColor(null);
-                    }}
-                    className={`cursor-pointer p-1 rounded border transition
-                        hover:border-neutral-400
-                        ${enableColor && selectedColor === null ?
-                            'bg-neutral-200 border-neutral-400'
-                            :
-                            'border-transparent'
-                        }`
-                    }
-                    title='#FFFFFF'
-                />
-
-                <img
-                    src={CloseIcon}
-                    onClick={() => {
-                        setEnableColor(false);
-                        setSelectedColor(null);
-                    }}
-                    className='cursor-pointer'
-                    title='Clear color selection.'
-                />
+                                <p className='text-neutral-700 text-xs text-right'>
+                                    Created on {created_at}
+                                </p>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
-        )
-    });
-
-    if (isRendering) {
-        return (
-            <div className='flex h-full'>
-                <div className='m-auto w-fit'>
-                    <Spinner size={45} />
-                </div>
-            </div>
-        );
-    };
-
-    return <MaterialReactTable table={table} />;
+        </>
+    );
 };

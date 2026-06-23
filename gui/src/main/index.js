@@ -133,12 +133,20 @@ app.whenReady().then(() => {
     };
   });
 
-  ipcMain.handle('db:getMarriageLeads', () => {
-    return databaseService.getMarriageLeads();
+  ipcMain.handle('db:createDataset', (_, schema_json) => {
+    return databaseService.createDataset(schema_json);
   });
 
-  ipcMain.handle('db:updateColor', (_, rowId, color) => {
-    return databaseService.updateColor(rowId, color);
+  ipcMain.handle('db:getDataset', (_, table_name) => {
+    return databaseService.getDataset(table_name);
+  });
+
+  ipcMain.handle('db:getAllDatasets', () => {
+    return databaseService.getAllDatasets();
+  });
+
+  ipcMain.handle('db:updateColor', (_, table_name, row_id, color) => {
+    return databaseService.updateColor(table_name, row_id, color);
   });
 
   ipcMain.on('updater:startInstall', () => {

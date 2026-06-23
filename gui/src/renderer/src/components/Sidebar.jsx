@@ -5,7 +5,7 @@ import GavelIcon from '../assets/gavel.svg';
 
 
 export default function Sidebar({ currentView, onNavClick }) {
-    const NavItem = ({ icon, title, style='light' }) => {
+    const NavItem = ({ icon, title, style = 'light' }) => {
         const selected = currentView === title;
 
         const bgColor = style === 'light' ? 'bg-neutral-600' : 'bg-neutral-700'
@@ -15,7 +15,11 @@ export default function Sidebar({ currentView, onNavClick }) {
                 className={`flex flex-col gap-1 cursor-pointer h-fit w-full text-center py-2 pe-[3px] transition 
                     hover:bg-neutral-600 border-l-3 
                     ${selected ? `${bgColor} border-blue-400` : 'border-transparent'}`}
-                onClick={() => onNavClick(title)}
+                onClick={() => {
+                    if (title !== currentView) {
+                        onNavClick(title);
+                    };
+                }}
             >
                 <img src={icon} className='h-[40px]' />
                 <strong>{title}</strong>
@@ -24,7 +28,7 @@ export default function Sidebar({ currentView, onNavClick }) {
     };
 
     return (
-        <div className='bg-neutral-800 text-white w-[100px] flex flex-col items-center gap-3 pt-4 shrink-0'>
+        <div className='bg-neutral-800 text-white w-[100px] flex flex-col items-center gap-3 pt-4 shrink-0 select-none'>
             <NavItem
                 icon={DashboardIcon}
                 title='Dashboard'
