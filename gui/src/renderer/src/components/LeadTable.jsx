@@ -82,8 +82,8 @@ export default function LeadTable({ dataset, onColorChange }) {
                                         className='cursor-alias hover:underline'
                                         onClick={e => e.stopPropagation()}
                                     >
-                                        {renderedCellValue.length > 22 ?
-                                            `${renderedCellValue.slice(0, 22)} ...`
+                                        {renderedCellValue.length > 20 ?
+                                            `${renderedCellValue.slice(0, 20)} ...`
                                             :
                                             renderedCellValue
                                         }

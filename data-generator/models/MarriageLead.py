@@ -66,7 +66,7 @@ class MarriageLead:
 
     def generate_insert_sql(self) -> str:
         return """
-            INSERT INTO marriageLeads (
+            INSERT INTO leads_marriage (
                 source, 
                 source_url, 
                 spouse1_first, 

@@ -85,7 +85,7 @@ class MarriageLicenseScraper(BaseScraper):
             spouse2_dob = lead.spouse2_dob
 
             query = """
-                SELECT id FROM marriageLeads WHERE 
+                SELECT id FROM leads_marriage WHERE 
                 spouse1_first = ? OR ? AND
                 spouse2_first = ? OR ? AND
                 spouse1_last = ? OR ? AND
