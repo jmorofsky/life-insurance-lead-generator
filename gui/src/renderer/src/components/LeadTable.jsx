@@ -29,6 +29,14 @@ function getContrastColor(hexColor) {
 };
 
 export default function LeadTable({ dataset, onColorChange }) {
+    /**
+    @param {object} dataset {
+        name {str}: table_name
+        columns {array}: PRAGMA table_info
+        data {array}: data rows
+    }
+    */
+
     const [isRendering, setIsRendering] = useState(true);
     const [enableColor, setEnableColor] = useState(false);
     const [selectedColor, setSelectedColor] = useState(null);
