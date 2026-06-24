@@ -54,17 +54,7 @@ export default function LeadTable({ dataset, onColorChange }) {
     const columns = useMemo(() => dataset.columns.map(col => {
         if (col.pk || col.name === 'row_color') { return };
 
-        const exceptions = ['and', 'or', 'the', 'of', 'in', 'to', 'a', 'an', 'for', 'but', 'by', 'with', 'at'];
-        const formatted_name = col.name
-            .split('_')
-            .map((word, i) => {
-                if (i === 0 || !exceptions.includes(word)) {
-                    return word.charAt(0).toUpperCase() + word.slice(1);
-                };
-
-                return word;
-            })
-            .join(' ');
+        const formatted_name = col.name.replace('_', ' ');
 
         switch (col.type) {
             case 'DATE':

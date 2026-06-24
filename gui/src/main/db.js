@@ -119,92 +119,92 @@ const MIGRATIONS = [
         description: 'Newlyweds. People who have just been married.',
         columns: [
             {
-                title: 'source',
+                title: 'Source',
                 type: 'text',
                 required: true
             },
             {
-                title: 'source_url',
+                title: 'Source_URL',
                 type: 'text',
                 required: false
             },
             {
-                title: 'spouse1_first',
-                type: 'text',
-                required: true
-            },
-            {
-                title: 'spouse1_middle',
-                type: 'text',
-                required: false
-            },
-            {
-                title: 'spouse1_last',
+                title: 'Spouse1_First',
                 type: 'text',
                 required: true
             },
             {
-                title: 'spouse1_dob',
+                title: 'Spouse1_Middle',
+                type: 'text',
+                required: false
+            },
+            {
+                title: 'Spouse1_Last',
+                type: 'text',
+                required: true
+            },
+            {
+                title: 'Spouse1_DOB',
                 type: 'date',
                 required: false
             },
             {
-                title: 'spouse2_first',
+                title: 'Spouse2_First',
                 type: 'text',
                 required: false
             },
             {
-                title: 'spouse2_middle',
+                title: 'Spouse2_Middle',
                 type: 'text',
                 required: false
             },
             {
-                title: 'spouse2_last',
+                title: 'Spouse2_Last',
                 type: 'text',
                 required: false
             },
             {
-                title: 'spouse2_dob',
+                title: 'Spouse2_DOB',
                 type: 'date',
                 required: false
             },
             {
-                title: 'married_last_name',
+                title: 'Married_Last_Name',
                 type: 'text',
                 required: false
             },
             {
-                title: 'license_date',
+                title: 'License_Date',
                 type: 'date',
                 required: false
             },
             {
-                title: 'license_number',
+                title: 'License_Number',
                 type: 'integer',
                 required: false
             },
             {
-                title: 'wedding_date',
+                title: 'Wedding_Date',
                 type: 'date',
                 required: false
             },
             {
-                title: 'wedding_county',
+                title: 'Wedding_County',
                 type: 'text',
                 required: false
             },
             {
-                title: 'wedding_state',
+                title: 'Wedding_State',
                 type: 'text',
                 required: false
             },
             {
-                title: 'scraped_at',
+                title: 'Scraped_At',
                 type: 'date',
                 required: true
             },
             {
-                title: 'score',
+                title: 'Score',
                 type: 'decimal(3, 2)',
                 required: true
             }
