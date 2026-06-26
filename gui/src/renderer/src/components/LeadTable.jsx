@@ -5,6 +5,7 @@ import {
 } from 'material-react-table';
 import Spinner from './Spinner';
 import Compact from '@uiw/react-color-compact';
+import BackArrowIcon from '../assets/arrow_back.svg';
 import ColorResetIcon from '../assets/colorReset.svg';
 import CloseIcon from '../assets/close.svg';
 import DeleteIcon from '../assets/delete.svg';
@@ -29,7 +30,7 @@ function getContrastColor(hexColor) {
     return yiq >= 128 ? '#000' : '#fff';
 };
 
-export default function LeadTable({ dataset, onColorChange, onRowDelete }) {
+export default function LeadTable({ dataset, onBackArrowClick, onColorChange, onRowDelete }) {
     /**
     @param {object} dataset {
         name {str}: table_name
@@ -51,6 +52,12 @@ export default function LeadTable({ dataset, onColorChange, onRowDelete }) {
 
         return () => clearTimeout(timer);
     }, []);
+
+    useEffect(() => {
+        if (selectedTool !== 'color' && selectedColor) {
+            setSelectedColor(null);
+        };
+    }, [selectedTool]);
 
     const columns = useMemo(() => dataset.columns.map(col => {
         if (col.pk || col.name === 'row_color') { return };
@@ -128,7 +135,7 @@ export default function LeadTable({ dataset, onColorChange, onRowDelete }) {
             return {
                 sx: {
                     backgroundColor: colorKey ?? 'inherit',
-                    cursor: selectedTool ? 'pointer' : null,
+                    cursor: selectedTool ? 'cell' : 'pointer',
                 },
                 onClick: e => {
                     if (!selectedTool) { return };
@@ -159,67 +166,77 @@ export default function LeadTable({ dataset, onColorChange, onRowDelete }) {
             };
         },
         renderTopToolbarCustomActions: ({ table }) => (
-            <div className='flex items-center'>
-                <div>
-                    <Compact
-                        color={selectedColor}
-                        onChange={color => {
-                            setSelectedTool('color');
-                            setSelectedColor(color.hex);
-                        }}
-                        style={{
-                            width: '245px',
-                            boxShadow: 'rgb(0 0 0 / 15%) 0px 0px 0px 1px, rgb(0 0 0 / 15%) 0px 8px 16px'
-                        }}
-                        rectRender={props => {
-                            if (props.color !== '#AB149E') { return };
+            <div className='flex gap-2'>
+                <img
+                    src={BackArrowIcon}
+                    className='self-start cursor-pointer w-6 p-1 rounded transition 
+                        hover:bg-neutral-200'
+                    onClick={onBackArrowClick}
+                />
 
-                            return (
-                                <button
-                                    className='cursor-pointer transition text-neutral-500 hover:text-black'
-                                    title="Clear selection."
-                                    style={{
-                                        width: 15,
-                                        height: 15,
-                                        lineHeight: '10px'
-                                    }}
-                                    onClick={e => {
-                                        e.stopPropagation();
-                                        setSelectedColor(null);
-                                        setSelectedTool(null);
-                                    }}
-                                >
-                                    ✕
-                                </button>
-                            );
-                        }}
-                    />
-                </div>
-
-                <div className='flex flex-col gap-1 ml-2'>
-                    <div className='flex gap-2'>
-
-                    </div>
-
+                <div className='flex items-center'>
                     <div>
-                        <img
-                            src={DeleteIcon}
-                            className={`cursor-pointer p-1 rounded border transition
-                                hover:border-red-300 
-                                ${selectedTool === 'delete' ?
-                                    'bg-red-50 border-red-300'
-                                    :
-                                    'border-transparent'
-                                }`}
-                            title='Delete lead.'
-                            onClick={() => {
-                                if (selectedTool === 'delete') {
-                                    setSelectedTool(null);
-                                } else {
-                                    setSelectedTool('delete');
-                                };
+                        <Compact
+                            color={selectedColor}
+                            onChange={color => {
+                                setSelectedTool('color');
+                                setSelectedColor(color.hex);
+                            }}
+                            style={{
+                                width: '245px',
+                                boxShadow: 'rgb(0 0 0 / 15%) 0px 0px 0px 1px, rgb(0 0 0 / 15%) 0px 8px 16px'
+                            }}
+                            rectRender={props => {
+                                if (props.color !== '#AB149E') { return };
+
+                                return (
+                                    <button
+                                        className='cursor-pointer transition text-neutral-500 hover:text-black'
+                                        title="Clear selection."
+                                        style={{
+                                            width: 15,
+                                            height: 15,
+                                            lineHeight: '10px'
+                                        }}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            setSelectedColor(null);
+                                            setSelectedTool(null);
+                                        }}
+                                    >
+                                        ✕
+                                    </button>
+                                );
                             }}
                         />
+                    </div>
+
+                    <div className='flex flex-col gap-1 ml-2'>
+                        <div className='flex gap-2'>
+
+                        </div>
+
+                        <div>
+                            <img
+                                src={DeleteIcon}
+                                className={`cursor-pointer p-1 rounded border transition
+                                    hover:border-red-300 
+                                    ${selectedTool === 'delete' ?
+                                        'bg-red-50 border-red-300'
+                                        :
+                                        'border-transparent'
+                                    }
+                                `}
+                                title='Delete lead.'
+                                onClick={() => {
+                                    if (selectedTool === 'delete') {
+                                        setSelectedTool(null);
+                                    } else {
+                                        setSelectedTool('delete');
+                                    };
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

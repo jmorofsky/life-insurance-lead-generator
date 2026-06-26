@@ -47,6 +47,7 @@ export default function App() {
             {currentDataset ?
               <LeadTable
                 dataset={currentDataset}
+                onBackArrowClick={() => setCurrentDataset(null)}
                 onColorChange={async (table_name, row_id, color) => {
                   await window.api.updateColor(table_name, row_id, color);
                   loadDataset(table_name);
