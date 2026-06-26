@@ -62,7 +62,7 @@ export default function LeadTable({ dataset, onBackArrowClick, onColorChange, on
     const columns = useMemo(() => dataset.columns.map(col => {
         if (col.pk || col.name === 'row_color') { return };
 
-        const formatted_name = col.name.replace('_', ' ');
+        const formatted_name = col.name.replaceAll('_', ' ');
 
         switch (col.type) {
             case 'DATE':
