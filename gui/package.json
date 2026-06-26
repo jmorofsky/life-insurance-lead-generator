@@ -32,7 +32,7 @@
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "@tailwindcss/vite": "^4.3.0",
-    "@uiw/react-color-github": "^2.10.1",
+    "@uiw/react-color-compact": "^2.10.3",
     "better-sqlite3": "^12.10.0",
     "electron-updater": "^6.8.9",
     "material-react-table": "^3.2.1",

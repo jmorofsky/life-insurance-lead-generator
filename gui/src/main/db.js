@@ -304,6 +304,14 @@ export const databaseService = {
         `;
 
         return safeQuery(statement, 'run') ? 'success' : 'error';
+    },
+    deleteRow: (table_name, row_id) => {
+        const statement = `
+            DELETE FROM ${table_name}
+            WHERE id = ${row_id}
+        `;
+
+        return safeQuery(statement, 'run') ? 'success' : 'error';
     }
 };
 

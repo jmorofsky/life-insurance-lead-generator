@@ -4,9 +4,10 @@ import {
     useMaterialReactTable,
 } from 'material-react-table';
 import Spinner from './Spinner';
-import Github from '@uiw/react-color-github';
+import Compact from '@uiw/react-color-compact';
 import ColorResetIcon from '../assets/colorReset.svg';
 import CloseIcon from '../assets/close.svg';
+import DeleteIcon from '../assets/delete.svg';
 
 
 function getContrastColor(hexColor) {
@@ -28,7 +29,7 @@ function getContrastColor(hexColor) {
     return yiq >= 128 ? '#000' : '#fff';
 };
 
-export default function LeadTable({ dataset, onColorChange }) {
+export default function LeadTable({ dataset, onColorChange, onRowDelete }) {
     /**
     @param {object} dataset {
         name {str}: table_name
@@ -38,7 +39,7 @@ export default function LeadTable({ dataset, onColorChange }) {
     */
 
     const [isRendering, setIsRendering] = useState(true);
-    const [enableColor, setEnableColor] = useState(false);
+    const [selectedTool, setSelectedTool] = useState(null);
     const [selectedColor, setSelectedColor] = useState(null);
 
     const data = dataset.data;
@@ -127,11 +128,23 @@ export default function LeadTable({ dataset, onColorChange }) {
             return {
                 sx: {
                     backgroundColor: colorKey ?? 'inherit',
-                    cursor: enableColor ? 'pointer' : null,
+                    cursor: selectedTool ? 'pointer' : null,
                 },
                 onClick: e => {
-                    if (!enableColor) { return };
-                    onColorChange(dataset.name, row.id, selectedColor);
+                    if (!selectedTool) { return };
+
+                    const row_id = parseInt(row.original.id);
+
+                    switch (selectedTool) {
+                        case 'color':
+                            onColorChange(dataset.name, row_id, selectedColor);
+                            break;
+                        case 'delete':
+                            onRowDelete(dataset.name, row_id);
+                            break;
+                        default:
+                            return;
+                    };
                 }
             };
         },
@@ -146,42 +159,69 @@ export default function LeadTable({ dataset, onColorChange }) {
             };
         },
         renderTopToolbarCustomActions: ({ table }) => (
-            <div className='flex gap-2 items-center'>
-                <Github
-                    color={selectedColor}
-                    onChange={color => {
-                        setEnableColor(true);
-                        setSelectedColor(color.hex);
-                    }}
-                    style={{ width: '412px' }}
-                />
+            <div className='flex items-center'>
+                <div>
+                    <Compact
+                        color={selectedColor}
+                        onChange={color => {
+                            setSelectedTool('color');
+                            setSelectedColor(color.hex);
+                        }}
+                        style={{
+                            width: '245px',
+                            boxShadow: 'rgb(0 0 0 / 15%) 0px 0px 0px 1px, rgb(0 0 0 / 15%) 0px 8px 16px'
+                        }}
+                        rectRender={props => {
+                            if (props.color !== '#AB149E') { return };
 
-                <img
-                    src={ColorResetIcon}
-                    onClick={() => {
-                        setEnableColor(true);
-                        setSelectedColor(null);
-                    }}
-                    className={`cursor-pointer p-1 rounded border transition
-                        hover:border-neutral-400
-                        ${enableColor && selectedColor === null ?
-                            'bg-neutral-200 border-neutral-400'
-                            :
-                            'border-transparent'
-                        }`
-                    }
-                    title='#FFFFFF'
-                />
+                            return (
+                                <button
+                                    className='cursor-pointer transition text-neutral-500 hover:text-black'
+                                    title="Clear selection."
+                                    style={{
+                                        width: 15,
+                                        height: 15,
+                                        lineHeight: '10px'
+                                    }}
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        setSelectedColor(null);
+                                        setSelectedTool(null);
+                                    }}
+                                >
+                                    ✕
+                                </button>
+                            );
+                        }}
+                    />
+                </div>
 
-                <img
-                    src={CloseIcon}
-                    onClick={() => {
-                        setEnableColor(false);
-                        setSelectedColor(null);
-                    }}
-                    className='cursor-pointer'
-                    title='Clear color selection.'
-                />
+                <div className='flex flex-col gap-1 ml-2'>
+                    <div className='flex gap-2'>
+
+                    </div>
+
+                    <div>
+                        <img
+                            src={DeleteIcon}
+                            className={`cursor-pointer p-1 rounded border transition
+                                hover:border-red-300 
+                                ${selectedTool === 'delete' ?
+                                    'bg-red-50 border-red-300'
+                                    :
+                                    'border-transparent'
+                                }`}
+                            title='Delete lead.'
+                            onClick={() => {
+                                if (selectedTool === 'delete') {
+                                    setSelectedTool(null);
+                                } else {
+                                    setSelectedTool('delete');
+                                };
+                            }}
+                        />
+                    </div>
+                </div>
             </div>
         )
     });
@@ -196,5 +236,5 @@ export default function LeadTable({ dataset, onColorChange }) {
         );
     };
 
-    return <MaterialReactTable table={table} />;
+    return <MaterialReactTable table={table} key={data.length} />;
 };

@@ -47,9 +47,13 @@ export default function App() {
             {currentDataset ?
               <LeadTable
                 dataset={currentDataset}
-                onColorChange={async (table_name, rowId, color) => {
-                  // +1 because our SQLite IDs start at 1, while MRT's start at 0
-                  await window.api.updateColor(table_name, parseInt(rowId) + 1, color);
+                onColorChange={async (table_name, row_id, color) => {
+                  await window.api.updateColor(table_name, row_id, color);
+                  loadDataset(table_name);
+                }}
+                onRowDelete={async (table_name, row_id) => {
+                  await window.api.deleteRow(table_name, row_id);
+                  loadAllDatasets();
                   loadDataset(table_name);
                 }}
               />

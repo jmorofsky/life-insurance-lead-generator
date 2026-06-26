@@ -149,6 +149,10 @@ app.whenReady().then(() => {
     return databaseService.updateColor(table_name, row_id, color);
   });
 
+  ipcMain.handle('db:deleteRow', (_, table_name, row_id) => {
+    return databaseService.deleteRow(table_name, row_id);
+  });
+
   ipcMain.on('updater:startInstall', () => {
     autoUpdater.quitAndInstall();
   });
