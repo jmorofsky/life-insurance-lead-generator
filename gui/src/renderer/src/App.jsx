@@ -52,6 +52,15 @@ export default function App() {
                   await window.api.updateColor(table_name, row_id, color);
                   loadDataset(table_name);
                 }}
+                onCellUpdate={async (table_name, row_id, column_name, value) => {
+                  await window.api.updateCell(table_name, row_id, column_name, value);
+                  loadDataset(table_name);
+                }}
+                onRowCreate={async (table_name, row_values) => {
+                  await window.api.createRow(table_name, row_values);
+                  loadAllDatasets();
+                  loadDataset(table_name);
+                }}
                 onRowDelete={async (table_name, row_id) => {
                   await window.api.deleteRow(table_name, row_id);
                   loadAllDatasets();

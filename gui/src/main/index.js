@@ -149,6 +149,14 @@ app.whenReady().then(() => {
     return databaseService.updateColor(table_name, row_id, color);
   });
 
+  ipcMain.handle('db:updateCell', (_, table_name, row_id, column_name, value) => {
+    return databaseService.updateCell(table_name, row_id, column_name, value);
+  });
+
+  ipcMain.handle('db:createRow', (_, table_name, row_values) => {
+    return databaseService.createRow(table_name, row_values);
+  });
+
   ipcMain.handle('db:deleteRow', (_, table_name, row_id) => {
     return databaseService.deleteRow(table_name, row_id);
   });

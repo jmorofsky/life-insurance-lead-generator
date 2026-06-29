@@ -10,6 +10,8 @@ const api = {
   getDataset: table_name => ipcRenderer.invoke('db:getDataset', table_name),
   getAllDatasets: () => ipcRenderer.invoke('db:getAllDatasets'),
   updateColor: (table_name, row_id, color) => ipcRenderer.invoke('db:updateColor', table_name, row_id, color),
+  updateCell: (table_name, row_id, column_name, value) => ipcRenderer.invoke('db:updateCell', table_name, row_id, column_name, value),
+  createRow: (table_name, row_values) => ipcRenderer.invoke('db:createRow', table_name, row_values),
   deleteRow: (table_name, row_id) => ipcRenderer.invoke('db:deleteRow', table_name, row_id),
 
   // auto-updater

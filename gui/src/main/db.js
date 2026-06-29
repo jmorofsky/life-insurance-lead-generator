@@ -305,6 +305,29 @@ export const databaseService = {
 
         return safeQuery(statement, 'run') ? 'success' : 'error';
     },
+    updateCell: (table_name, row_id, column_name, value) => {
+        const statement = `
+            UPDATE ${table_name}
+            SET ${column_name} = '${value || ''}'
+            WHERE id = ${row_id}
+        `;
+
+        return safeQuery(statement, 'run') ? 'success' : 'error';
+    },
+    createRow: (table_name, row_values) => {
+        const columns = Object.keys(row_values).map(c => c.replaceAll(' ', '_')).join(', ');
+        const values = Object.values(row_values).map(v => {
+            if (v) { return `'${v}'` }
+            else { return 'NULL' };
+        }).join(', ');
+
+        const statement = `
+            INSERT INTO ${table_name} (${columns})
+            VALUES (${values})
+        `;
+        
+        return safeQuery(statement, 'run') ? 'success' : 'error';
+    },
     deleteRow: (table_name, row_id) => {
         const statement = `
             DELETE FROM ${table_name}
