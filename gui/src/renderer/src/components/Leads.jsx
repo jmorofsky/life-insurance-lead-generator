@@ -26,7 +26,7 @@ export default function Leads({ datasets, onDatasetClick, onDatasetCreate }) {
                     return (
                         <div
                             key={dataset.id}
-                            className='w-75 border border-neutral-400 rounded shadow-lg shadow-neutral-500 cursor-pointer transition
+                            className='w-75 h-fit border border-neutral-400 rounded shadow-lg shadow-neutral-500 cursor-pointer transition
                                 hover:scale-102'
                             onClick={() => onDatasetClick(dataset.table_name)}
                         >
