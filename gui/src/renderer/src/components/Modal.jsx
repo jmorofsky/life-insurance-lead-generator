@@ -41,7 +41,7 @@ export default function Modal({ isOpen, onClose, children, size = 'md' }) {
             ref={dialogRef}
             onCancel={handleCancel}
             onClick={handleCancel}
-            className={`m-auto ${sizeClasses[size]} max-h-[90vh] overflow-y-auto rounded-md border border-neutral-500 shadow-lg shadow-neutral-500 transition-[opacity,transform] duration-200 ease-in opacity-100 scale-100
+            className={`m-auto ${sizeClasses[size]} max-h-[90vh] overflow-hidden rounded-md border border-neutral-500 shadow-lg shadow-neutral-500 transition-[opacity,transform] duration-200 ease-in opacity-100 scale-100
                 backdrop:bg-black/35 backdrop:transition-opacity backdrop:duration-200 backdrop:ease-in
                 starting:opacity-0 starting:scale-95 starting:backdrop:opacity-0`}
         >

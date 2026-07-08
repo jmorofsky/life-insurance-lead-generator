@@ -55,10 +55,10 @@ async function triggerPythonGenerator(configData) {
 let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 900,
+    width: 1000,
     height: 670,
-    minWidth: 850,
-    minHeight: 500,
+    minWidth: 1000,
+    minHeight: 600,
     show: false,
     autoHideMenuBar: true,
     icon: icon,
@@ -106,7 +106,7 @@ app.whenReady().then(() => {
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
 
-  autoUpdater.checkForUpdates().catch(() => {});
+  autoUpdater.checkForUpdates().catch(() => { });
 
   setInterval(() => {
     autoUpdater.checkForUpdates();
@@ -163,6 +163,11 @@ app.whenReady().then(() => {
 
   ipcMain.on('updater:startInstall', () => {
     autoUpdater.quitAndInstall();
+  });
+
+  ipcMain.on('restart', () => {
+    app.relaunch();
+    app.exit(0);
   });
 
   // #endregion server call definitions

@@ -71,6 +71,7 @@ export default function App() {
               <Leads
                 datasets={datasets}
                 onDatasetClick={async table_name => loadDataset(table_name)}
+                onDatasetCreate={loadAllDatasets}
               />
             }
           </>
@@ -78,7 +79,7 @@ export default function App() {
 
         {currentView === 'Generate' &&
           <Generate
-            onGenerate={async () => loadAllDatasets()}
+            onGenerate={loadAllDatasets}
           />
         }
 

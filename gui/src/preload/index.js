@@ -17,7 +17,10 @@ const api = {
   // auto-updater
   onUpdateError: callback => ipcRenderer.on('update-error', () => callback()),
   onUpdateDownloaded: callback => ipcRenderer.on('update-downloaded', () => callback()),
-  startInstall: () => ipcRenderer.send('updater:startInstall')
+  startInstall: () => ipcRenderer.send('updater:startInstall'),
+
+  // application restart
+  restart: () => ipcRenderer.send('restart')
 };
 
 // #endregion server call definitions

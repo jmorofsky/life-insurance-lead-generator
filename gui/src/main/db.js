@@ -20,7 +20,7 @@ import path from 'path';
 
 function generate_create_table_sql(schema_json) {
     /**
-    * @param {json} schema_json - JSON object containing table details
+    * @param {object} schema_json - JSON object containing table details
     * @return - array of SQL strings or null if failure
     */
 
@@ -37,6 +37,10 @@ function generate_create_table_sql(schema_json) {
         ]
     }
     */
+
+    // SQLite only has 5 storage classes: NULL, INTEGER, REAL, TEXT, and BLOB. 
+    // However, We still create tables with other types (namely date, decimal, and double)
+    // to allow for custom cell rendering based on type in lead tables.
 
     try {
         const create_table_sql = `
@@ -71,8 +75,7 @@ function generate_create_table_sql(schema_json) {
                 UPDATE lead_tables
                 SET row_count = row_count + 1
                 WHERE table_name = '${schema_json.name}';
-            END
-        `;
+            END`;
 
         const delete_trigger_sql = `
             CREATE TRIGGER IF NOT EXISTS trg_${schema_json.name}_after_delete
@@ -81,8 +84,7 @@ function generate_create_table_sql(schema_json) {
                 UPDATE lead_tables
                 SET row_count = row_count - 1
                 WHERE table_name = '${schema_json.name}';
-            END
-        `;
+            END`;
 
         return [create_table_sql, update_metadata_sql, insert_trigger_sql, delete_trigger_sql];
     } catch (error) {
@@ -205,7 +207,7 @@ const MIGRATIONS = [
             },
             {
                 title: 'Score',
-                type: 'decimal(3, 2)',
+                type: 'decimal',
                 required: true
             }
         ]
@@ -261,7 +263,7 @@ function safeQuery(statement, method) {
     };
 };
 
-// TODO: better error handling here
+// TODO: better error handling here - update safeQuery to return object, status and message if error
 export const databaseService = {
     createDataset: schema_json => {
         const stmts = generate_create_table_sql(schema_json);
@@ -307,10 +309,10 @@ export const databaseService = {
     },
     updateCell: (table_name, row_id, column_name, value) => {
         const statement = `
-            UPDATE ${table_name}
-            SET ${column_name} = '${value || ''}'
-            WHERE id = ${row_id}
-        `;
+                UPDATE ${table_name}
+                SET ${column_name} = ${value === null ? 'NULL' : `'${value}'`}
+                WHERE id = ${row_id}
+            `;
 
         return safeQuery(statement, 'run') ? 'success' : 'error';
     },
@@ -325,7 +327,7 @@ export const databaseService = {
             INSERT INTO ${table_name} (${columns})
             VALUES (${values})
         `;
-        
+
         return safeQuery(statement, 'run') ? 'success' : 'error';
     },
     deleteRow: (table_name, row_id) => {

@@ -60,7 +60,7 @@ export default function Generate({ onGenerate }) {
             setError(resp.error);
         };
 
-        await onGenerate();
+        onGenerate();
         setLoading(false);
     };
 

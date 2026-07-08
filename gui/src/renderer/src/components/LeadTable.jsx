@@ -82,20 +82,8 @@ export default function LeadTable({
 
         const formatted_name = col.name.replaceAll('_', ' ');
 
+        // by convention, a column type of 'DOUBLE' indicates a percentage
         switch (col.type) {
-            case 'DATE':
-                return {
-                    header: formatted_name,
-                    accessorFn: row => {
-                        const date = row[col.name];
-
-                        if (!date) { return null };
-                        if (typeof date !== 'string') { return date };
-
-                        return date.split('T')[0];
-                    }
-                };
-
             case 'TEXT':
                 return {
                     header: formatted_name,
@@ -163,9 +151,9 @@ export default function LeadTable({
                         {validationError}
                     </p>
 
-                    <div className='flex px-3 gap-5'>
+                    <div className='flex px-3 gap-5 select-none'>
                         <button
-                            className='px-2 py-1 rounded-sm font-medium transition-colors duration-200 shadow-lg shadow-neutral-300 border border-neutral-300 cursor-pointer 
+                            className='px-2 py-1 rounded-sm font-medium transition-colors duration-200 shadow-lg shadow-neutral-300 border border-neutral-300 cursor-pointer
                                 hover:border-neutral-400 
                                 active:translate-y-px'
                             onClick={() => table.setCreatingRow(null)}
@@ -174,7 +162,7 @@ export default function LeadTable({
                         </button>
 
                         <button
-                            className='flex items-center justify-center gap-2 relative overflow-hidden pl-[8px] pr-[11px] py-1 rounded-sm font-medium transition-colors duration-200 shadow-lg shadow-neutral-300 border border-neutral-300 cursor-pointer 
+                            className='flex items-center justify-center gap-2 relative overflow-hidden pl-[8px] pr-[11px] py-1 rounded-sm font-medium transition-colors duration-200 shadow-lg shadow-neutral-300 border border-neutral-300 cursor-pointer
                                 hover:border-neutral-400 
                                 active:translate-y-px'
                             onClick={async () => {
@@ -195,13 +183,20 @@ export default function LeadTable({
                 </div>
             </>
         ),
+        muiEditRowDialogProps: {
+            sx: {
+                '& .MuiPaper-root:focus': {
+                    outline: 'none'
+                }
+            }
+        },
         muiEditTextFieldProps: ({ cell, row }) => ({
             onBlur: e => {
                 if (selectedTool !== 'edit') { return };
 
                 const row_id = parseInt(row.original.id);
                 const column_name = cell.column.id.replaceAll(' ', '_');
-                const value = e.target.value;
+                const value = e.target.value.trim() || null;
 
                 onCellUpdate(dataset.name, row_id, column_name, value);
             },
@@ -242,15 +237,15 @@ export default function LeadTable({
                 }
             };
         },
-        muiTablePaperProps: () => {
-            return {
-                sx: { height: '100%' }
-            };
+        muiTablePaperProps: {
+            sx: { height: '100%' }
         },
-        muiTableContainerProps: () => {
-            return {
-                sx: { height: '100%' }
-            };
+        muiTableContainerProps: {
+            sx: {
+                height: '100%',
+                contain: 'strict',
+                willChange: 'transform'
+            }
         },
         renderTopToolbarCustomActions: ({ table }) => (
             <div className='flex gap-2'>

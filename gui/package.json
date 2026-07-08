@@ -31,11 +31,13 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "@formkit/drag-and-drop": "^0.6.1",
     "@tailwindcss/vite": "^4.3.0",
     "@uiw/react-color-compact": "^2.10.3",
     "better-sqlite3": "^12.10.0",
     "electron-updater": "^6.8.9",
     "material-react-table": "^3.2.1",
+    "react-error-boundary": "^6.1.2",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
