@@ -37,6 +37,14 @@ select:focus {
     outline: none;
 }
 
+div:focus {
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}
+
 #popover::after {
     content: "";
     position: absolute; 

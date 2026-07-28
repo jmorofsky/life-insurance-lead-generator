@@ -7,6 +7,9 @@ import { electronAPI } from '@electron-toolkit/preload';
 const api = {
   generate: configData => ipcRenderer.invoke('generate', configData),
   createDataset: schema_json => ipcRenderer.invoke('db:createDataset', schema_json),
+  deleteDataset: (dataset_id, table_name) => ipcRenderer.invoke('db:deleteDataset', dataset_id, table_name),
+  cloneDataset: dataset => ipcRenderer.invoke('db:cloneDataset', dataset),
+  editDataset: (dataset, new_name, new_description) => ipcRenderer.invoke('db:editDataset', dataset, new_name, new_description),
   getDataset: table_name => ipcRenderer.invoke('db:getDataset', table_name),
   getAllDatasets: () => ipcRenderer.invoke('db:getAllDatasets'),
   updateColor: (table_name, row_id, color) => ipcRenderer.invoke('db:updateColor', table_name, row_id, color),

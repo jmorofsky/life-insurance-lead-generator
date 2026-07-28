@@ -32,6 +32,7 @@
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "@formkit/drag-and-drop": "^0.6.1",
+    "@radix-ui/react-context-menu": "^2.3.3",
     "@tailwindcss/vite": "^4.3.0",
     "@uiw/react-color-compact": "^2.10.3",
     "better-sqlite3": "^12.10.0",

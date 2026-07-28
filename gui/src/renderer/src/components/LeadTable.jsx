@@ -63,13 +63,11 @@ export default function LeadTable({
 
     function validateRow(values) {
         for (const col of Object.keys(values)) {
-            const col_name = col.replaceAll(' ', '_');
-
             if (!values[col]) {
-                const match = dataset.columns.find(c => c.name === col_name);
+                const match = dataset.columns.find(c => c.name === col);
 
                 if (match && match.notnull) {
-                    return `${col_name} is required.`;
+                    return `${col} is required.`;
                 };
             };
         };
@@ -80,13 +78,11 @@ export default function LeadTable({
     const columns = useMemo(() => dataset.columns.map(col => {
         if (col.pk || col.name === 'row_color') { return };
 
-        const formatted_name = col.name.replaceAll('_', ' ');
-
         // by convention, a column type of 'DOUBLE' indicates a percentage
         switch (col.type) {
             case 'TEXT':
                 return {
-                    header: formatted_name,
+                    header: col.name,
                     accessorKey: col.name,
                     Cell: ({ renderedCellValue, row }) => (
                         <>
@@ -115,7 +111,7 @@ export default function LeadTable({
 
             default:
                 return {
-                    header: formatted_name,
+                    header: col.name,
                     accessorKey: col.name
                 };
         };
@@ -195,10 +191,9 @@ export default function LeadTable({
                 if (selectedTool !== 'edit') { return };
 
                 const row_id = parseInt(row.original.id);
-                const column_name = cell.column.id.replaceAll(' ', '_');
                 const value = e.target.value.trim() || null;
 
-                onCellUpdate(dataset.name, row_id, column_name, value);
+                onCellUpdate(dataset.name, row_id, cell.column.id, value);
             },
             sx: {
                 '& .MuiInputBase-input': {

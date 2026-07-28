@@ -38,7 +38,7 @@ export default function ErrorScreen({ error }) {
                         window.api.restart();
                     }}
                 >
-                    Restart
+                    Restart Application
                 </button>
 
                 <pre className='mt-6 text-red-400'>{error}</pre>

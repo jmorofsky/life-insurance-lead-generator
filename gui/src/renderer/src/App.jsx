@@ -72,6 +72,9 @@ export default function App() {
                 datasets={datasets}
                 onDatasetClick={async table_name => loadDataset(table_name)}
                 onDatasetCreate={loadAllDatasets}
+                onDatasetDelete={loadAllDatasets}
+                onDatasetClone={loadAllDatasets}
+                onDatasetEdit={loadAllDatasets}
               />
             }
           </>

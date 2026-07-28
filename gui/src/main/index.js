@@ -55,7 +55,7 @@ async function triggerPythonGenerator(configData) {
 let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1000,
+    width: 1150,
     height: 670,
     minWidth: 1000,
     minHeight: 600,
@@ -135,6 +135,18 @@ app.whenReady().then(() => {
 
   ipcMain.handle('db:createDataset', (_, schema_json) => {
     return databaseService.createDataset(schema_json);
+  });
+
+  ipcMain.handle('db:deleteDataset', (_, dataset_id, table_name) => {
+    return databaseService.deleteDataset(dataset_id, table_name);
+  });
+
+  ipcMain.handle('db:cloneDataset', (_, dataset) => {
+    return databaseService.cloneDataset(dataset);
+  });
+
+  ipcMain.handle('db:editDataset', (_, dataset, new_name, new_description) => {
+    return databaseService.editDataset(dataset, new_name, new_description);
   });
 
   ipcMain.handle('db:getDataset', (_, table_name) => {
